@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "F:\\2017F\\535\\Project\\FileTest(android)1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi\\ic_launcher.png",
+        "source": "F:\\2017F\\535\\Project\\FileTest(android)1\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "F:\\2017F\\535\\Project\\Benchmarking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi\\ic_launcher.png",
+        "source": "F:\\2017F\\535\\Project\\Benchmarking\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    }
+]

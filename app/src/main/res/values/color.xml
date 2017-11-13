@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="clr_normal">#669966</color>
+    <color name="clr_pressed">#006400</color>
+    <color name="white">#ffffff</color>
+</resources>
