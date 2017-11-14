@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.ObjectInputStream;
-import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -24,10 +23,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.app.Activity;
-import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +38,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.os.AsyncTask;
 import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -50,7 +47,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 
 /**
- * Created by alexd on 2017/11/9.
+ * Created by alexd on 2017/10/9.
  */
 
 public class MainActivity extends Activity {
@@ -64,7 +61,7 @@ public class MainActivity extends Activity {
 	private Spinner spinner;
 	private ArrayAdapter<String> adapter;
 	private static final String [] dataset ={"iris", "breast-cancer", "credit-g", "glass", "hypothyroid"/*, "supermarket"*/};
-	private static final String IP = "10.143.11.177";
+	private static final String IP = "192.168.0.13";
 	static final String PROJECT_PATH = "sdcard/Benchmarking_ML_Project/";
 	static final String LOGFILE_PATH = "mylog.txt";
 	private String chooseDataset = "iris";
