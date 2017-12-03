@@ -145,8 +145,93 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+        <CheckBox
+            android:id="@+id/checkBoxDT"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="1dp" />
+        <TextView
+            android:id="@+id/TextViewDTPara"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="DT parameters: "/>
+        <TextView
+            android:id="@+id/TextViewDTConfidenceFactor"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Confidence Factor="/>
+        <EditText
+            android:id="@+id/edtDTConfidenceFactor"
+            android:layout_gravity="center"
+            android:hint="Auto"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"></EditText>
+        <CheckBox
+            android:id="@+id/checkBoxDTSplit"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/TextViewDTBinarySplit"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Binary Split"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+        <CheckBox
+            android:id="@+id/checkBoxLR"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="1dp" />
+        <TextView
+            android:id="@+id/TextViewLRPara"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="LR parameters: "/>
+        <TextView
+            android:id="@+id/TextViewLRRidge"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Ridge="/>
+        <EditText
+            android:id="@+id/edtLRRidge"
+            android:layout_gravity="center"
+            android:hint="Auto"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"></EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_weight="20">
         <ScrollView
             android:layout_width="match_parent"

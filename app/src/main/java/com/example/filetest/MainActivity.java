@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.app.Activity;
+import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import weka.core.Check;
 import weka.core.Instances;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -58,10 +60,16 @@ public class MainActivity extends Activity {
 	private CheckBox c1;
 	private CheckBox c2;
 	private CheckBox c3;
+	private CheckBox cDTPara;
+	private CheckBox cDTBinarySplit;
+	private CheckBox cLRPara;
+	private EditText etDTConfidenceFactor;
+	private EditText etLRRidge;
+
 	private Spinner spinner;
 	private ArrayAdapter<String> adapter;
 	private static final String [] dataset ={"iris", "breast-cancer", "credit-g", "glass", "hypothyroid"/*, "supermarket"*/};
-	private static final String IP = "192.168.0.13";
+	private static final String IP = "10.143.10.253";
 	static final String PROJECT_PATH = "sdcard/Benchmarking_ML_Project/";
 	static final String LOGFILE_PATH = "mylog.txt";
 	private String chooseDataset = "iris";
@@ -74,6 +82,10 @@ public class MainActivity extends Activity {
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c2 = (CheckBox) findViewById(R.id.checkBox2);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
+		cDTPara = (CheckBox) findViewById(R.id.checkBoxDT);
+		cDTBinarySplit = (CheckBox) findViewById(R.id.checkBoxDTSplit);
+		cLRPara = (CheckBox) findViewById(R.id.checkBoxLR);
+
 		spinner = (Spinner) findViewById(R.id.spinner);
 		adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,dataset);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,7 +105,11 @@ public class MainActivity extends Activity {
 												}
 											});
 		et = (EditText)findViewById(R.id.edtPercent);
+		etDTConfidenceFactor = (EditText)findViewById(R.id.edtDTConfidenceFactor);
+		etLRRidge = (EditText)findViewById(R.id.edtLRRidge);
 //        et.setText("80");
+
+		etDTConfidenceFactor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		resultTv = (TextView) findViewById(R.id.TextViewResult);
 		resultTv.setMovementMethod(ScrollingMovementMethod.getInstance());
 		mButton = (Button)findViewById(R.id.btnexec);
@@ -136,6 +152,17 @@ public class MainActivity extends Activity {
 		   Toast.makeText(getApplicationContext(), "Split rate must be between 1 and 99",Toast.LENGTH_SHORT).show();
 		   return false;
 	   }
+	   if (c2.isChecked() && cDTPara.isChecked()){
+		   String confidenceFactor = etDTConfidenceFactor.getText().toString();
+		   if (confidenceFactor == null || confidenceFactor.equals("") || confidenceFactor.length() == 0) {
+		   } else {
+			   float f_confidenceFactor = Float.parseFloat(confidenceFactor);
+			   if (f_confidenceFactor < 0.01 || f_confidenceFactor > 0.5){
+				   Toast.makeText(getApplicationContext(), "Confidence Factor must be between 0.01 and 0.5",Toast.LENGTH_SHORT).show();
+				   return false;
+			   }
+		   }
+	   }
 	   return true;
    }
 
@@ -151,10 +178,33 @@ public class MainActivity extends Activity {
 			sb.append(dilimiter);
 			dilimiter = "|";
 			sb.append("dt");
+			if (cDTPara.isChecked()){
+				String confidenceFactor = etDTConfidenceFactor.getText().toString();
+				if (confidenceFactor == null || confidenceFactor.equals("") || confidenceFactor.length() == 0) {
+					sb.append(":");
+					sb.append("0");
+				} else {
+					float f_confidenceFactor = Float.parseFloat(confidenceFactor);
+					sb.append(":");
+					sb.append(f_confidenceFactor);
+				}
+				String binary_split = cDTBinarySplit.isChecked()?"true":"false";
+				sb.append(",");
+				sb.append(binary_split);
+			}
 		}
 		if (c3.isChecked()){
 			sb.append(dilimiter);
 			sb.append("lr");
+			if (cLRPara.isChecked()){
+				String ridge = etLRRidge.getText().toString();
+				if (ridge == null || ridge.equals("") || ridge.length() == 0) {
+				} else {
+					double d_ridge = Double.parseDouble(ridge);
+					sb.append(":");
+					sb.append(d_ridge);
+				}
+			}
 		}
 		return sb.toString();
 	}

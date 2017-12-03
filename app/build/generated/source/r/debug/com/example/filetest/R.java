@@ -25,15 +25,25 @@ public final class R {
         public static final int run_button_select=0x7f020001;
     }
     public static final class id {
-        public static final int TextViewResult=0x7f09000a;
+        public static final int TextViewDTBinarySplit=0x7f09000f;
+        public static final int TextViewDTConfidenceFactor=0x7f09000c;
+        public static final int TextViewDTPara=0x7f09000b;
+        public static final int TextViewLRPara=0x7f090011;
+        public static final int TextViewLRRidge=0x7f090012;
+        public static final int TextViewResult=0x7f090014;
         public static final int backbt=0x7f090001;
         public static final int btnexec=0x7f090009;
         public static final int checkBox1=0x7f090003;
         public static final int checkBox2=0x7f090004;
         public static final int checkBox3=0x7f090005;
+        public static final int checkBoxDT=0x7f09000a;
+        public static final int checkBoxDTSplit=0x7f09000e;
+        public static final int checkBoxLR=0x7f090010;
         public static final int deletebt=0x7f090000;
+        public static final int edtDTConfidenceFactor=0x7f09000d;
+        public static final int edtLRRidge=0x7f090013;
         public static final int edtPercent=0x7f090007;
-        public static final int log=0x7f09000b;
+        public static final int log=0x7f090015;
         public static final int logview=0x7f090002;
         public static final int spinner=0x7f090006;
         public static final int txtPercent=0x7f090008;

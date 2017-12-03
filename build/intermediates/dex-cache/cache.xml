@@ -3,21 +3,21 @@
 
     <item
         is-multidex="false"
-        jar="F:\2017F\535\Project\FileTest(android)1\app\libs\wekaSTRIPPED.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="1d553332d3346a8efe1d52000973115cc5ef975d">
-        <dex dex="F:\2017F\535\Project\FileTest(android)1\app\build\intermediates\pre-dexed\debug\wekaSTRIPPED_731520f2db4493e7e9d8afb3dae2cb27346567dd.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\alexd\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-v4\18.0.0\support-v4-18.0.0.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
-        <dex dex="F:\2017F\535\Project\FileTest(android)1\app\build\intermediates\pre-dexed\debug\support-v4-18.0.0_8976295f6a268311c38f6f7160ecb17bfefda228.jar" />
+        <dex dex="F:\2017F\535\Project\Group18_project\Benchmarking\app\build\intermediates\pre-dexed\debug\support-v4-18.0.0_8976295f6a268311c38f6f7160ecb17bfefda228.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="F:\2017F\535\Project\Group18_project\Benchmarking\app\libs\wekaSTRIPPED.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1d553332d3346a8efe1d52000973115cc5ef975d">
+        <dex dex="F:\2017F\535\Project\Group18_project\Benchmarking\app\build\intermediates\pre-dexed\debug\wekaSTRIPPED_39ca53ed873b5765e38a0b093d741d5994acc179.jar" />
     </item>
 
 </items>
