@@ -43,10 +43,11 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-import weka.core.Check;
+import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+
 
 /**
  * Created by alexd on 2017/10/9.
@@ -55,6 +56,7 @@ import weka.classifiers.Evaluation;
 public class MainActivity extends Activity {
 
 	private Button mButton;
+	private Button mmulti_thread_button;
 	private EditText et;
 	private TextView resultTv;
 	private CheckBox c1;
@@ -113,6 +115,7 @@ public class MainActivity extends Activity {
 		resultTv = (TextView) findViewById(R.id.TextViewResult);
 		resultTv.setMovementMethod(ScrollingMovementMethod.getInstance());
 		mButton = (Button)findViewById(R.id.btnexec);
+		mmulti_thread_button = (Button) findViewById(R.id.btnmultiexec);
 
 		mButton.setOnClickListener(new OnClickListener() {
 			
@@ -123,7 +126,7 @@ public class MainActivity extends Activity {
 				logAction("Execute Button Clicked");
 				String alg = getChoices();
 				String rate = et.getText().toString();
-				if (!inputCheck(alg, rate)){
+				if (!inputCheck(alg, rate, false)){
 					resultTv.setText("Please check your input");
 					logAction("Input Check Failed");
 					return;
@@ -135,13 +138,47 @@ public class MainActivity extends Activity {
 //				Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();	alg = et.getText().toString();
 			}
 		});
+
+		mmulti_thread_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0){
+				// TODO Auto-generated method stub
+				resultTv.setText("Please wait...");
+				logAction("Multi-thread Execute Button Clicked");
+				String alg = getChoices();
+				String rate = et.getText().toString();
+				if (!inputCheck(alg, rate, true)){
+					resultTv.setText("Please check your input");
+					logAction("Input Check Failed");
+					return;
+				}
+				double splitRate = Double.valueOf(rate);
+				MultiThreadTraingingTask multiThreadTraingingTask = new MultiThreadTraingingTask();
+				Toast.makeText(getApplicationContext(), "Executing",Toast.LENGTH_SHORT).show();
+				multiThreadTraingingTask.execute(new TaskParams(alg, splitRate, chooseDataset));
+//				Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();	alg = et.getText().toString();
+			}
+		});
 	
    }
 
-   private boolean inputCheck(String alg, String rate){
-	   if (alg.equals("") || alg.length() == 0){
-		   Toast.makeText(getApplicationContext(), "Please select your algorithm",Toast.LENGTH_SHORT).show();
-		   return false;
+   private boolean inputCheck(String alg, String rate, boolean rate_only){
+	   if (!rate_only) {
+		   if (alg.equals("") || alg.length() == 0) {
+			   Toast.makeText(getApplicationContext(), "Please select your algorithm", Toast.LENGTH_SHORT).show();
+			   return false;
+		   }
+		   if (c2.isChecked() && cDTPara.isChecked()){
+			   String confidenceFactor = etDTConfidenceFactor.getText().toString();
+			   if (confidenceFactor == null || confidenceFactor.equals("") || confidenceFactor.length() == 0) {
+			   } else {
+				   float f_confidenceFactor = Float.parseFloat(confidenceFactor);
+				   if (f_confidenceFactor < 0.01 || f_confidenceFactor > 0.5){
+					   Toast.makeText(getApplicationContext(), "Confidence Factor must be between 0.01 and 0.5",Toast.LENGTH_SHORT).show();
+					   return false;
+				   }
+			   }
+		   }
 	   }
 	   if (rate == null || rate.equals("") || rate.length() == 0){
 		   Toast.makeText(getApplicationContext(), "Please enter split rate",Toast.LENGTH_SHORT).show();
@@ -151,17 +188,6 @@ public class MainActivity extends Activity {
 	   if (splitRate > 99 || splitRate < 1){
 		   Toast.makeText(getApplicationContext(), "Split rate must be between 1 and 99",Toast.LENGTH_SHORT).show();
 		   return false;
-	   }
-	   if (c2.isChecked() && cDTPara.isChecked()){
-		   String confidenceFactor = etDTConfidenceFactor.getText().toString();
-		   if (confidenceFactor == null || confidenceFactor.equals("") || confidenceFactor.length() == 0) {
-		   } else {
-			   float f_confidenceFactor = Float.parseFloat(confidenceFactor);
-			   if (f_confidenceFactor < 0.01 || f_confidenceFactor > 0.5){
-				   Toast.makeText(getApplicationContext(), "Confidence Factor must be between 0.01 and 0.5",Toast.LENGTH_SHORT).show();
-				   return false;
-			   }
-		   }
 	   }
 	   return true;
    }
@@ -525,28 +551,9 @@ public class MainActivity extends Activity {
 				Thread[] threads = new Thread[choices.length];
 				// classify test data using models
 				for (int i = 0; i < choices.length;i++){
-//					long startTime=System.currentTimeMillis();
-//					Evaluation testEval = new Evaluation(test);
 					ClassifyRun p = new ClassifyRun(choices[i], cls[i], test, splitRatio, trainingTime[i]);
 					threads[i] =new Thread(p);
 					threads[i].start();
-
-//					testEval.evaluateModel(cls[i], test);
-//					long endTime=System.currentTimeMillis();
-//					if (choices[i].equals("nb")){
-//						sb.append("\nNaive Bayes:").append("\n");
-//					} else if (choices[i].equals("dt")){
-//						sb.append("\nDecision Tree:").append("\n");
-//					} else {
-//						sb.append("\nLogistic Regression:").append("\n");
-//					}
-//					sb.append("Split ratio: ").append(splitRatio * 100).append("%\n");
-//					sb.append("training time: ").append(trainingTime[i]).append("\n");
-//					sb.append("classification time: ").append(endTime - startTime).append("ms\n");
-//					sb.append(testEval.toMatrixString());
-//					testEval.crossValidateModel(cls[i], test, 10, new Random(1));
-//					sb.append(testEval.toClassDetailsString());
-//					sb.append("\n");
 				}
 				for (Thread t : threads){
 					t.join();
@@ -584,6 +591,184 @@ public class MainActivity extends Activity {
 					} else {
 						sb.append("\nLogistic Regression:").append("\n");
 					}
+					sb.append("Split ratio: ").append(splitRatio * 100).append("%\n");
+					sb.append("training time: ").append(trainingTime).append("\n");
+					sb.append("classification time: ").append(endTime - startTime).append("ms\n");
+					sb.append(testEval.toMatrixString());
+					testEval.crossValidateModel(cls, test, 10, new Random(1));
+					sb.append(testEval.toClassDetailsString());
+					sb.append("\n");
+				} catch (Exception e){
+					try {
+						throw new Exception(e);
+					} catch (Exception ee){
+
+					}
+				}
+				lock.lock();
+				mysb.append(sb);
+				lock.unlock();
+			}
+		}
+
+	}
+	private class MultiThreadTraingingTask extends AsyncTask<TaskParams, Void, String> {
+		StringBuilder mysb = new StringBuilder();
+		private Lock lock = new ReentrantLock();
+
+		@Override
+		protected String doInBackground(TaskParams... taskParamses) {
+			String result = "";
+			String alg = taskParamses[0].getAlg();
+			double splitRatio = taskParamses[0].getSplitRate() / 100;
+			String choosedDataset = taskParamses[0].getChoosedDataset();
+			String datapath = "iris";		//if (choosedDataset.equals(dataset[0]))
+			if (choosedDataset.equals(dataset[1])) {
+				datapath = "breast-cancer";
+			} else if (choosedDataset.equals(dataset[2])) {
+				datapath = "credit-g";
+			} else if (choosedDataset.equals(dataset[3])) {
+				datapath = "glass";
+			} else if (choosedDataset.equals(dataset[4])) {
+				datapath = "hypothyroid";
+			}/* else if (choosedDataset.equals(dataset[5])) {
+				datapath = "supermarket";
+			}*/
+			try {
+				// load data
+				String dataPath = PROJECT_PATH + "data/" + datapath + ".arff";
+				Instances data = new Instances(new BufferedReader(new FileReader(dataPath)));
+				data.setClassIndex(data.numAttributes() - 1);
+				// split into train and test
+				data.randomize(new java.util.Random());
+				int trainSize = Math.min(data.numInstances() - 1, Math.max(1, (int) Math.round(data.numInstances() * splitRatio)));
+				int testSize = data.numInstances() - trainSize;
+				Instances train = new Instances(data, 0, trainSize);
+				Instances test = new Instances(data, trainSize, testSize);
+				result = classify(train, test, splitRatio);
+
+			} catch (Exception ex) {
+				Log.i("chz", null, ex);
+			}
+			return result;
+		}
+
+		protected void onPostExecute(String result) {
+			Log.d("result",result);
+			try {
+//				Thread.sleep(1000);
+			} catch (Exception e){}
+			Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();
+			resultTv.setText(result);
+			logToFile(result);
+			logAction("Execution");
+		}
+
+		private void logToFile(String result){
+			File file = new File(PROJECT_PATH + LOGFILE_PATH);
+			FileWriter fw = null;
+			BufferedWriter bw = null;
+			try {
+				if(!file.exists()){
+					file.createNewFile();
+				}
+				fw=new FileWriter(file.getAbsoluteFile(),true);  //true means append to end
+				bw=new BufferedWriter(fw);
+				bw.write(result);
+				bw.close();
+				fw.close();
+			} catch (Exception e){
+				Toast.makeText(getApplicationContext(), "Error while saving log file",Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		private void logAction(String action){
+			File file = new File(PROJECT_PATH + LOGFILE_PATH);
+			FileWriter fw = null;
+			BufferedWriter bw = null;
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+			String sd = sdf.format(new Date(date.getTime()));
+			String content = "Action " + action + " complete on: " + sd + "\n";
+			if (action.equals("Execution")){
+				content += "\n\n";
+			}
+			try {
+				if(!file.exists()){
+					file.createNewFile();
+				}
+				fw=new FileWriter(file.getAbsoluteFile(),true);  //true means append to end
+				bw=new BufferedWriter(fw);
+				bw.write(content);
+				bw.close();
+				fw.close();
+			} catch (Exception e){
+				Toast.makeText(getApplicationContext(), "Error while logging action",Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		private Classifier[] trainModel (Instances TrainDes) {
+			Classifier[] mycls = new Classifier[1];
+			try {
+				J48 decisionT = new J48();
+				String[] option = weka.core.Utils.splitOptions("-a");	// set multi-thread training option
+				decisionT.setOptions(option);
+				decisionT.buildClassifier(TrainDes);
+				mycls[0] = decisionT;
+			}catch (Exception e){
+
+			}
+			return mycls;
+		}
+
+		private String classify(Instances TrainDes, Instances test, double splitRatio){
+			try {
+				String[] choices = {"dt"};
+				String[] trainingTime = {"",};
+				long startTime=System.currentTimeMillis();
+				Classifier[] cls = trainModel(TrainDes);
+				long endTime=System.currentTimeMillis();
+				trainingTime[0] = String.valueOf(endTime - startTime).concat("ms");
+//				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PROJECT_PATH + modelFileName));
+//				cls = (Classifier[]) ois.readObject();
+//				ois.close();
+				Thread[] threads = new Thread[choices.length];
+				// classify test data using models
+				for (int i = 0; i < choices.length;i++){
+					ClassifyRun p = new ClassifyRun(choices[i], cls[i], test, splitRatio, trainingTime[i]);
+					threads[i] =new Thread(p);
+					threads[i].start();
+				}
+				for (Thread t : threads){
+					t.join();
+				}
+				return mysb.toString();
+			} catch (Exception e){}
+			return "Error while classifying";
+		}
+
+		class ClassifyRun implements Runnable{
+			String choice;
+			Classifier cls;
+			Instances test;
+			double splitRatio;
+			String trainingTime;
+
+			ClassifyRun (String choice, Classifier cls, Instances test, double splitRatio, String trainingTime){
+				this.choice = choice;
+				this.cls = cls;
+				this.test = test;
+				this.splitRatio = splitRatio;
+				this.trainingTime = trainingTime;
+			}
+			public void run() {
+				StringBuffer sb = new StringBuffer();
+				try {
+					long startTime = System.currentTimeMillis();
+					Evaluation testEval = new Evaluation(test);
+					testEval.evaluateModel(cls, test);
+					long endTime = System.currentTimeMillis();
+					sb.append("\nDecision Tree:").append("\n");
 					sb.append("Split ratio: ").append(splitRatio * 100).append("%\n");
 					sb.append("training time: ").append(trainingTime).append("\n");
 					sb.append("classification time: ").append(endTime - startTime).append("ms\n");

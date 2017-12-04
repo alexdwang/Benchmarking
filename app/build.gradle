@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile files('libs/wekaSTRIPPED.jar')
     compile 'com.android.support:support-v4:18.0.0'
     compile files('libs/weka-3-2-3-parallel.jar')
+    compile files('libs/wekaSTRIPPED.jar')
 }

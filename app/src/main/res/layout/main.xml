@@ -227,8 +227,21 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"></EditText>
-    </LinearLayout>
 
+        <Button
+            android:id="@+id/btnmultiexec"
+            android:background="@drawable/run_button_select"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="30sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:text="Decision Tree Multi-thread Run"></Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
