@@ -1,1 +1,1 @@
-# Filetest-android
+Machine learning is going mobile. Cloud-based computer servers outfits the computation power, while it is also eager to learn and response to the users even when offline. In this project, our goal is to develop a mobile app, which contains 3 Weka implemented Machine Learning classifiers testing on 5 open source datasets from UCI repository. Both the local-cloud mobile computing framework and locally multi-thread computing framework are implemented. A fully designed GUI provides the users with access to the choose classifier, dataset and split ratio.
